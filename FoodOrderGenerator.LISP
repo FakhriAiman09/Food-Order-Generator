@@ -11,11 +11,11 @@ Purpose:     This program uses random-number generation to create food orders
              initially provided. The program loops until the user decides that
              s/he is done creating food orders.
 IDE/Compiler:
-             LispWorks 8.0.1 Personal Edition
+             LispWorks 8.1.2 Personal Edition
 Operating system:
              MS Windows 10
-References:  Web sites listed on our course Programming Language Resources page
-             Lisp interactive sessions and demo functions posted on our course
+References:  Web sites listed on course Programming Language Resources page
+             Lisp interactive sessions and demo functions posted on course
              Demo Programs page
 
 |#
