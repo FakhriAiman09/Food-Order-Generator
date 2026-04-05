@@ -1,0 +1,237 @@
+#|
+Author:      [Your Name]
+E-mail:      [your-email]@psu.edu
+Course:      CMPSC 460
+Assignment:  Lisp Programming Project
+Due date:    4/6/2026
+File:        FoodOrderGenerator.LISP
+Purpose:     This program uses random-number generation to create food orders
+             from lists of different categories of food items. It also allows
+             the user to add food items to or remove food items from the lists
+             initially provided. The program loops until the user decides that
+             s/he is done creating food orders.
+IDE/Compiler:
+             LispWorks 8.0.1 Personal Edition
+Operating system:
+             MS Windows 10
+References:  Web sites listed on our course Programming Language Resources page
+             Lisp interactive sessions and demo functions posted on our course
+             Demo Programs page
+#
+
+
+; Function to display the main menu of options
+(defun display-main-menu ()
+  (format t "~%MENU OPTIONS:~%")
+  (format t "1) Generate a food order~%")
+  (format t "2) Add a food item~%")
+  (format t "3) Remove a food item~%")
+  (format t "4) Quit~%")
+)
+
+
+; Function to display the food item category submenu
+(defun display-sub-menu ()
+  (format t "~%FOOD ITEM TYPES:~%")
+  (format t "1) Sandwich~%")
+  (format t "2) Side~%")
+  (format t "3) Beverage~%")
+  (format t "4) Dessert~%")
+)
+
+
+; Function to display all four food item lists
+(defun display-all-lists (sandwiches sides beverages desserts)
+  (format t "~%Current food items lists:~%")
+  (format t "Sandwiches: ~a~%" sandwiches)
+  (format t "Sides      : ~a~%" sides)
+  (format t "Beverages  : ~a~%" beverages)
+  (format t "Desserts   : ~a~%" desserts)
+)
+
+
+; Function to obtain the user's menu choice and validate it is within 1-4
+(defun get-menu-choice ()
+  (format t "Please enter your choice: ")
+  (finish-output)
+  (let ((choice (read)))
+    (if (and (integerp choice) (>= choice 1) (<= choice 4))
+        choice
+        (progn
+          (format t "Invalid choice! Please re-enter.~%")
+          (get-menu-choice)
+        )
+    )
+  )
+)
+
+
+; Function to obtain the user's submenu choice and validate it is within 1-4
+(defun get-sub-menu-choice ()
+  (format t "Please enter your choice: ")
+  (finish-output)
+  (let ((choice (read)))
+    (if (and (integerp choice) (>= choice 1) (<= choice 4))
+        choice
+        (progn
+          (format t "Invalid choice! Please re-enter.~%")
+          (get-sub-menu-choice)
+        )
+    )
+  )
+)
+
+
+; Function to obtain a new food item name from the user (returned as a symbol)
+(defun get-food-item ()
+  (format t "Please enter your food item: ")
+  (finish-output)
+  (read)
+)
+
+
+; Function to generate a random food order by selecting one item from each list
+; Returns the order as a list: (sandwich side beverage dessert)
+(defun generate-food-order (sandwiches sides beverages desserts)
+  (let* ((sandwich  (nth (random (length sandwiches))  sandwiches))
+         (side      (nth (random (length sides))       sides))
+         (beverage  (nth (random (length beverages))   beverages))
+         (dessert   (nth (random (length desserts))    desserts))
+         (order     (append (list sandwich) (list side) (list beverage) (list dessert))))
+    (format t "~%Random food order:~%")
+    (format t " ~a, ~a, ~a, ~a~%" sandwich side beverage dessert)
+    order
+  )
+)
+
+
+; Function to add a food item to the specified list if it is not already present.
+; Returns the (possibly updated) list.
+(defun add-food-item (food-list item)
+  (if (member item food-list)
+      food-list
+      (append food-list (list item))
+  )
+)
+
+
+; Function to remove a food item from the specified list.
+; If the list is empty or the item is not present, the original list is returned unchanged.
+(defun remove-food-item (food-list item)
+  (if (null food-list)
+      food-list
+      (remove item food-list)
+  )
+)
+
+
+; Function to handle the "add a food item" workflow.
+; Displays the current lists, prompts for category and item, then returns
+; updated lists as a list: (sandwiches sides beverages desserts)
+(defun handle-add (sandwiches sides beverages desserts)
+  (display-all-lists sandwiches sides beverages desserts)
+  (display-sub-menu)
+  (let* ((cat   (get-sub-menu-choice))
+         (item  (get-food-item)))
+    (cond
+      ((= cat 1)
+       (let ((new-list (add-food-item sandwiches item)))
+         (format t "Sandwiches: ~a~%" new-list)
+         (list new-list sides beverages desserts)
+       ))
+      ((= cat 2)
+       (let ((new-list (add-food-item sides item)))
+         (format t "Sides      : ~a~%" new-list)
+         (list sandwiches new-list beverages desserts)
+       ))
+      ((= cat 3)
+       (let ((new-list (add-food-item beverages item)))
+         (format t "Beverages  : ~a~%" new-list)
+         (list sandwiches sides new-list desserts)
+       ))
+      ((= cat 4)
+       (let ((new-list (add-food-item desserts item)))
+         (format t "Desserts   : ~a~%" new-list)
+         (list sandwiches sides beverages new-list)
+       ))
+    )
+  )
+)
+
+
+; Function to handle the "remove a food item" workflow.
+; Displays the current lists, prompts for category and item, then returns
+; updated lists as a list: (sandwiches sides beverages desserts)
+(defun handle-remove (sandwiches sides beverages desserts)
+  (display-all-lists sandwiches sides beverages desserts)
+  (display-sub-menu)
+  (let* ((cat   (get-sub-menu-choice))
+         (item  (get-food-item)))
+    (cond
+      ((= cat 1)
+       (let ((new-list (remove-food-item sandwiches item)))
+         (format t "Sandwiches: ~a~%" new-list)
+         (list new-list sides beverages desserts)
+       ))
+      ((= cat 2)
+       (let ((new-list (remove-food-item sides item)))
+         (format t "Sides      : ~a~%" new-list)
+         (list sandwiches new-list beverages desserts)
+       ))
+      ((= cat 3)
+       (let ((new-list (remove-food-item beverages item)))
+         (format t "Beverages  : ~a~%" new-list)
+         (list sandwiches sides new-list desserts)
+       ))
+      ((= cat 4)
+       (let ((new-list (remove-food-item desserts item)))
+         (format t "Desserts   : ~a~%" new-list)
+         (list sandwiches sides beverages new-list)
+       ))
+    )
+  )
+)
+
+
+; Main driver function: initializes the four food lists and loops until the user quits.
+(defun loop-program ()
+  (let ((sandwiches '(blt tuna-salad grilled-cheese hamburger cheesesteak))
+        (sides       '(tossed-salad pasta-salad fries onion-rings chips))
+        (beverages   '(lemonade iced-tea water soda coffee))
+        (desserts    '(ice-cream cake pie brownie cookies)))
+    (loop
+      (display-main-menu)
+      (let ((choice (get-menu-choice)))
+        (cond
+          ; Option 1: Generate a random food order
+          ((= choice 1)
+           (generate-food-order sandwiches sides beverages desserts)
+          )
+          ; Option 2: Add a food item to a list
+          ((= choice 2)
+           (let ((updated (handle-add sandwiches sides beverages desserts)))
+             (setf sandwiches (first  updated))
+             (setf sides      (second updated))
+             (setf beverages  (third  updated))
+             (setf desserts   (fourth updated))
+           )
+          )
+          ; Option 3: Remove a food item from a list
+          ((= choice 3)
+           (let ((updated (handle-remove sandwiches sides beverages desserts)))
+             (setf sandwiches (first  updated))
+             (setf sides      (second updated))
+             (setf beverages  (third  updated))
+             (setf desserts   (fourth updated))
+           )
+          )
+          ; Option 4: Quit
+          ((= choice 4)
+           (format t "~%\"Thank you for using my Food Order Generator!\"~%")
+           (return)
+          )
+        )
+      )
+    )
+  )
+)
