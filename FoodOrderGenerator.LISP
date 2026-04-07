@@ -13,11 +13,10 @@ Purpose:     This program uses random-number generation to create food orders
 IDE/Compiler:
              LispWorks 8.1.2 Personal Edition
 Operating system:
-             MS Windows 10
+             MS Windows 11
 References:  Web sites listed on course Programming Language Resources page
              Lisp interactive sessions and demo functions posted on course
              Demo Programs page
-
 |#
 
 ; Function to display the main menu of options
@@ -40,9 +39,9 @@ References:  Web sites listed on course Programming Language Resources page
 (defun display-all-lists (sandwiches sides beverages desserts)
   (format t "~%Current food items lists:~%")
   (format t "Sandwiches: ~a~%" sandwiches)
-  (format t "Sides      : ~a~%" sides)
-  (format t "Beverages  : ~a~%" beverages)
-  (format t "Desserts   : ~a~%" desserts))
+  (format t "Sides     : ~a~%" sides)
+  (format t "Beverages : ~a~%" beverages)
+  (format t "Desserts  : ~a~%" desserts))
 
 ; Function to obtain and validate the main menu choice (1-4)
 (defun get-menu-choice ()
@@ -106,15 +105,15 @@ References:  Web sites listed on course Programming Language Resources page
          (list new-list sides beverages desserts)))
       ((= cat 2)
        (let ((new-list (add-food-item sides item)))
-         (format t "Sides      : ~a~%" new-list)
+         (format t "Sides     : ~a~%" new-list)
          (list sandwiches new-list beverages desserts)))
       ((= cat 3)
        (let ((new-list (add-food-item beverages item)))
-         (format t "Beverages  : ~a~%" new-list)
+         (format t "Beverages : ~a~%" new-list)
          (list sandwiches sides new-list desserts)))
       ((= cat 4)
        (let ((new-list (add-food-item desserts item)))
-         (format t "Desserts   : ~a~%" new-list)
+         (format t "Desserts  : ~a~%" new-list)
          (list sandwiches sides beverages new-list))))))
 
 ; Function to handle removing a food item from the chosen category
@@ -130,15 +129,15 @@ References:  Web sites listed on course Programming Language Resources page
          (list new-list sides beverages desserts)))
       ((= cat 2)
        (let ((new-list (remove-food-item sides item)))
-         (format t "Sides      : ~a~%" new-list)
+         (format t "Sides     : ~a~%" new-list)
          (list sandwiches new-list beverages desserts)))
       ((= cat 3)
        (let ((new-list (remove-food-item beverages item)))
-         (format t "Beverages  : ~a~%" new-list)
+         (format t "Beverages : ~a~%" new-list)
          (list sandwiches sides new-list desserts)))
       ((= cat 4)
        (let ((new-list (remove-food-item desserts item)))
-         (format t "Desserts   : ~a~%" new-list)
+         (format t "Desserts  : ~a~%" new-list)
          (list sandwiches sides beverages new-list))))))
 
 ; Main driver function that initializes lists and loops until user quits
@@ -167,4 +166,4 @@ References:  Web sites listed on course Programming Language Resources page
              (setf desserts   (fourth updated))))
           ((= choice 4)
            (format t "~%\"Thank you for using my Food Order Generator!\"~%")
-           (return)))))))
+           (return (values))))))))
